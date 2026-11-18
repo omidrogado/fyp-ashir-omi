@@ -2,7 +2,7 @@
 
 ## 1. Architectural Rules
 - Strict separation between UI, state management, and native platform channel bridges.
-- Never transmit raw video/camera frames across the network. All call streaming must rely strictly on lightweight text tokens or skeletal coordinate payloads.
+- Never send raw camera frames to any server. Video calls are peer-to-peer via WebRTC only; in low-bandwidth mode, send only skeletal-coordinate JSON over Data Channels instead of video.
 - Keep ML model inference and MediaPipe frame processing off the main UI thread (use Background Isolates / Workers).
 
 ## 2. Code Quality & Formatting
