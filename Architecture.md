@@ -82,37 +82,169 @@ data           Repository implementations: Supabase, SQLite, FastAPI client, pla
 
 ```
 fyp-ashir-omi/
-  assets/                  Shared design assets (icons, hand-sign images, avatars, .glb)
-  fyp_app/                 Flutter app
-    lib/
-      main.dart
-      app.dart             MaterialApp.router, theme mode
-      core/
-        theme/             app_theme.dart (design tokens)
-        router/            app_router.dart
-        config/            Supabase and backend settings (read from env, never committed)
-        errors/            Failure types, error messages shown to the user
-        utils/
-      shared/
-        widgets/           ChatBubble, GlassButton, GlassNavBar, GroupedCard, OtpBox...
-      features/
-        onboarding/        Splash, intro, phone, verify, theme, user type, profile, avatar, permissions
-        auth/              Supabase auth, session
-        chat/              Chat list, conversation, message status, voice messages, local cache
-        recognition/       Camera pipeline, landmarks, DTW, ambiguity pop-up
-        custom_signs/      Record, verify, synonyms, conflicts, dictionary
-        translation/       Translate to sign (images), speech to sign, keyboard, token mapping
-        avatars/           Avatar rendering, sequence playback, live retargeting
-        calls/             Signaling, WebRTC, low-bandwidth mode, call history
-        alerts/            Haptic patterns, visual cues, danger-sound detection
-        face_to_face/      Two-way camera translation
-        help/              Complaint / help request
-        settings/          Profile, avatar, speech, language, background detection
-      platform/            Dart side of native bridges (MediaPipe, YAMNet, haptics)
-    android/               Native Kotlin code for MediaPipe / YAMNet bridges
-    test/
-  ml-engine/               Python workspace (see section 9)
-  Architecture.md  Design.md  Memory.md  Phases.md  PRD.md  README.md  Rules.md
+├── assets/                            # Shared design assets (icons, hand-sign images, avatars, .glb)
+│   ├── signs/
+│   ├── avatars/
+│   └── icons/
+├── fyp_app/                           # Flutter Android application
+│   ├── lib/
+│   │   ├── main.dart
+│   │   ├── app.dart                   # MaterialApp.router, theme mode
+│   │   ├── core/
+│   │   │   ├── theme/
+│   │   │   │   └── app_theme.dart     # Design tokens (light & dark)
+│   │   │   ├── router/
+│   │   │   │   └── app_router.dart    # go_router + auth redirects
+│   │   │   ├── config/
+│   │   │   │   └── app_config.dart    # Supabase & FastAPI env settings
+│   │   │   ├── errors/
+│   │   │   │   └── failures.dart      # Failure types & user-facing error messages
+│   │   │   ├── database/
+│   │   │   │   └── app_database.dart  # sqflite setup & migrations
+│   │   │   └── utils/
+│   │   │       └── validators.dart
+│   │   ├── shared/
+│   │   │   └── widgets/
+│   │   │       ├── chat_bubble.dart
+│   │   │       ├── glass_button.dart
+│   │   │       ├── glass_nav_bar.dart
+│   │   │       ├── grouped_card.dart
+│   │   │       └── otp_box.dart
+│   │   ├── features/
+│   │   │   ├── onboarding/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── splash_screen.dart
+│   │   │   │   │   │   ├── intro_screen.dart
+│   │   │   │   │   │   ├── phone_input_screen.dart
+│   │   │   │   │   │   ├── otp_verify_screen.dart
+│   │   │   │   │   │   ├── theme_selection_screen.dart
+│   │   │   │   │   │   ├── user_type_screen.dart
+│   │   │   │   │   │   ├── profile_setup_screen.dart
+│   │   │   │   │   │   ├── avatar_selection_screen.dart
+│   │   │   │   │   │   └── permissions_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── auth/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   └── screens/
+│   │   │   │   │       └── login_screen.dart
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── chat/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── chat_list_screen.dart
+│   │   │   │   │   │   ├── conversation_screen.dart
+│   │   │   │   │   │   ├── new_chat_screen.dart
+│   │   │   │   │   │   └── contact_info_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── recognition/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   └── sign_camera_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── ambiguity_popup.dart
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── custom_signs/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── custom_dictionary_screen.dart
+│   │   │   │   │   │   ├── record_sign_screen.dart
+│   │   │   │   │   │   ├── verify_sign_screen.dart
+│   │   │   │   │   │   └── sign_detail_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── translation/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── text_to_sign_screen.dart
+│   │   │   │   │   │   └── speech_to_sign_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── sign_keyboard_widget.dart
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── avatars/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   └── avatar_preview_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── calls/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── call_history_screen.dart
+│   │   │   │   │   │   ├── incoming_call_screen.dart
+│   │   │   │   │   │   ├── outgoing_call_screen.dart
+│   │   │   │   │   │   └── active_call_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── alerts/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   └── danger_alerts_log_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   │       └── danger_alert_banner.dart
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── face_to_face/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   └── face_to_face_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   ├── help/
+│   │   │   │   ├── presentation/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── help_center_screen.dart
+│   │   │   │   │   │   └── submit_complaint_screen.dart
+│   │   │   │   │   └── widgets/
+│   │   │   │   ├── application/
+│   │   │   │   ├── domain/
+│   │   │   │   └── data/
+│   │   │   └── settings/
+│   │   │       ├── presentation/
+│   │   │       │   ├── screens/
+│   │   │       │   │   ├── settings_screen.dart
+│   │   │       │   │   ├── edit_profile_screen.dart
+│   │   │       │   │   ├── change_avatar_screen.dart
+│   │   │       │   │   ├── language_speech_settings_screen.dart
+│   │   │       │   │   └── danger_detection_settings_screen.dart
+│   │   │       │   └── widgets/
+│   │   │       ├── application/
+│   │   │       ├── domain/
+│   │   │       └── data/
+│   │   └── platform/                  # Dart side of native bridges
+│   │       ├── mediapipe_channel.dart
+│   │       └── yamnet_channel.dart
+│   ├── android/                       # Native Kotlin code for MediaPipe & YAMNet bridges
+│   └── test/                          # Unit & widget tests
+├── ml-engine/                         # Python workspace (DTW tuning, landmark testing, Whisper/token tests)
+├── Architecture.md
+├── Design.md
+├── Memory.md
+├── PRD.md
+├── Phases.md
+├── README.md
+└── Rules.md
 ```
 
 Each folder under `features/` has `presentation/`, `application/`, `domain/`, `data/`.
