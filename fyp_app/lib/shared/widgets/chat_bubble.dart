@@ -1,90 +1,62 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:fyp_app/core/theme/app_theme.dart';
+import 'package:fyp_app/core/theme/app_typography.dart';
 
-/// iOS-styled chat bubble for incoming and outgoing messages.
+/// Message bubble (Design.md sections 5 and 8). Pass either [text] or a custom [child]
+/// (voice bubble, sign chips, etc.).
 class ChatBubble extends StatelessWidget {
-  final String text;
-  final bool isOutgoing;
-  final String? time;
-  final Widget? trailing;
-
   const ChatBubble({
     super.key,
-    required this.text,
+    this.text,
+    this.child,
     required this.isOutgoing,
-    this.time,
-    this.trailing,
-  });
+  }) : assert((text == null) != (child == null), 'Provide exactly one of text or child');
+
+  final String? text;
+  final Widget? child;
+  final bool isOutgoing;
+
+  static const double maxBubbleWidth = 272;
+  static const Radius _round = Radius.circular(20);
+  static const Radius _tail = Radius.circular(6);
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
+    final AppColors c = context.colors;
+    final Color textColor = isOutgoing ? c.onAccent : c.text;
 
-    final bubbleDecoration = isOutgoing
-        ? BoxDecoration(
-            gradient: LinearGradient(
-              colors: [colors.outA, colors.outB],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(18),
-              topRight: Radius.circular(18),
-              bottomLeft: Radius.circular(18),
-              bottomRight: Radius.circular(4),
-            ),
-          )
-        : BoxDecoration(
-            color: colors.bubbleIn,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(18),
-              topRight: Radius.circular(18),
-              bottomLeft: Radius.circular(4),
-              bottomRight: Radius.circular(18),
-            ),
-          );
+    final BorderRadius radius = BorderRadius.only(
+      topLeft: _round,
+      topRight: _round,
+      bottomLeft: isOutgoing ? _round : _tail,
+      bottomRight: isOutgoing ? _tail : _round,
+    );
 
-    final textColor = isOutgoing ? colors.onAccent : colors.text;
+    final Widget content = child ?? Text(text!);
 
     return Align(
       alignment: isOutgoing ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.76),
-        decoration: bubbleDecoration,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                color: textColor,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-              ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: maxBubbleWidth),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            color: isOutgoing ? null : c.bubbleIn,
+            gradient: isOutgoing
+                ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[c.outA, c.outB],
+                  )
+                : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+            child: DefaultTextStyle.merge(
+              style: AppTypography.body.copyWith(height: 1.3, color: textColor),
+              child: content,
             ),
-            if (time != null || trailing != null) ...[
-              const SizedBox(height: 4),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (time != null)
-                    Text(
-                      time!,
-                      style: TextStyle(
-                        color: isOutgoing ? colors.onAccent.withOpacity(0.7) : colors.sec,
-                        fontSize: 11,
-                      ),
-                    ),
-                  if (trailing != null) ...[
-                    const SizedBox(width: 4),
-                    trailing!,
-                  ],
-                ],
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
