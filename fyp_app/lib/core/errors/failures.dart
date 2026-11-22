@@ -1,30 +1,20 @@
-/// Base class for failure handling across the application.
-abstract class Failure {
+/// User-facing failures. `message` is short, warm and safe to show on screen.
+sealed class Failure implements Exception {
+  const Failure(this.message);
   final String message;
-  final int? statusCode;
-
-  const Failure(this.message, [this.statusCode]);
 
   @override
-  String toString() => message;
+  String toString() => '$runtimeType: $message';
 }
 
-class ServerFailure extends Failure {
-  const ServerFailure([super.message = 'A server error occurred. Please try again.']);
+final class NetworkFailure extends Failure {
+  const NetworkFailure([super.message = 'No connection. We will try again soon.']);
 }
 
-class AuthFailure extends Failure {
-  const AuthFailure([super.message = 'Authentication failed. Please verify your credentials.']);
+final class TranscriptionFailure extends Failure {
+  const TranscriptionFailure([super.message = 'Could not read that voice message. Tap to retry.']);
 }
 
-class NetworkFailure extends Failure {
-  const NetworkFailure([super.message = 'No internet connection. Please check your network.']);
-}
-
-class CacheFailure extends Failure {
-  const CacheFailure([super.message = 'Local cache error occurred.']);
-}
-
-class RecognitionFailure extends Failure {
-  const RecognitionFailure([super.message = 'Sign recognition failed. Please ensure good lighting.']);
+final class ModuleFailure extends Failure {
+  const ModuleFailure([super.message = 'Something stopped working. The rest of the app is fine.']);
 }
