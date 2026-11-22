@@ -1,65 +1,88 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fyp_app/core/providers/repository_providers.dart';
+import 'package:fyp_app/core/router/app_routes.dart';
+import 'package:fyp_app/core/router/app_shell.dart';
+import 'package:fyp_app/core/router/auth_guard.dart';
+import 'package:fyp_app/features/auth/domain/auth_repository.dart';
+import 'package:fyp_app/features/auth/domain/auth_status.dart';
+import 'package:fyp_app/shared/widgets/route_placeholder.dart';
+import 'package:go_router/go_router.dart';
 
-/// Application route definitions and navigation routes.
-class AppRoutes {
-  static const String splash = '/';
-  static const String intro = '/intro';
-  static const String phoneInput = '/phone-input';
-  static const String otpVerify = '/otp-verify';
-  static const String themeSelection = '/theme-selection';
-  static const String userType = '/user-type';
-  static const String profileSetup = '/profile-setup';
-  static const String avatarSelection = '/avatar-selection';
-  static const String permissions = '/permissions';
-  static const String login = '/login';
+final Provider<GoRouter> appRouterProvider = Provider<GoRouter>((Ref ref) {
+  final AuthRepository auth = ref.watch(authRepositoryProvider);
+  final _AuthRefreshListenable refresh = _AuthRefreshListenable(auth.statusChanges);
+  ref.onDispose(refresh.dispose);
 
-  // Chat & Communication
-  static const String chatList = '/chats';
-  static const String conversation = '/conversation';
-  static const String newChat = '/new-chat';
-  static const String contactInfo = '/contact-info';
+  return GoRouter(
+    initialLocation: AppRoutes.splash,
+    refreshListenable: refresh,
+    redirect: (BuildContext context, GoRouterState state) =>
+        resolveAuthRedirect(status: auth.currentStatus, location: state.matchedLocation),
+    routes: <RouteBase>[
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (BuildContext context, GoRouterState state) => RoutePlaceholder(
+          title: 'Lafzio',
+          note: 'Splash 0a / 0b arrive in Phase 1.',
+          actionLabel: 'Continue',
+          onAction: () => context.go(AppRoutes.chats),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (BuildContext context, GoRouterState state) => const RoutePlaceholder(
+          title: 'Welcome',
+          note: 'Onboarding screens 1 to 9 arrive in Phase 1.',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (BuildContext context, GoRouterState state) => const RoutePlaceholder(
+          title: 'Log in',
+          note: 'Login arrives in Phase 1.',
+        ),
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (BuildContext context, GoRouterState state, StatefulNavigationShell shell) =>
+            AppShell(navigationShell: shell),
+        branches: <StatefulShellBranch>[
+          _branch(AppRoutes.chats, 'Chats', 'Chat list and conversation arrive in Phase 2.'),
+          _branch(AppRoutes.calls, 'Calls', 'Video calling arrives in Phase 5.'),
+          _branch(AppRoutes.signs, 'Signs', 'Sign dictionary arrives in Phase 3.'),
+          _branch(AppRoutes.translate, 'Translate', 'Speech to sign arrives in Phase 4.'),
+          _branch(AppRoutes.me, 'Me', 'Settings arrive in Phase 4.'),
+        ],
+      ),
+    ],
+  );
+});
 
-  // Recognition & Translation
-  static const String signCamera = '/recognition/camera';
-  static const String textToSign = '/translation/text-to-sign';
-  static const String speechToSign = '/translation/speech-to-sign';
-
-  // Custom Signs
-  static const String customDictionary = '/custom-signs';
-  static const String recordSign = '/custom-signs/record';
-  static const String verifySign = '/custom-signs/verify';
-  static const String signDetail = '/custom-signs/detail';
-
-  // Calls
-  static const String callHistory = '/calls';
-  static const String incomingCall = '/calls/incoming';
-  static const String outgoingCall = '/calls/outgoing';
-  static const String activeCall = '/calls/active';
-
-  // Other Features
-  static const String avatarPreview = '/avatars/preview';
-  static const String dangerAlertsLog = '/alerts';
-  static const String faceToFace = '/face-to-face';
-  static const String helpCenter = '/help';
-  static const String submitComplaint = '/help/complaint';
-
-  // Settings
-  static const String settings = '/settings';
-  static const String editProfile = '/settings/profile';
-  static const String changeAvatar = '/settings/avatar';
-  static const String languageSpeechSettings = '/settings/language-speech';
-  static const String dangerDetectionSettings = '/settings/danger-detection';
+StatefulShellBranch _branch(String path, String title, String note) {
+  return StatefulShellBranch(
+    routes: <RouteBase>[
+      GoRoute(
+        path: path,
+        builder: (BuildContext context, GoRouterState state) =>
+            RoutePlaceholder(title: title, note: note),
+      ),
+    ],
+  );
 }
 
-/// Navigation and auth redirect coordinator.
-class AppRouter {
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+/// Re-runs the redirect whenever the auth status changes.
+class _AuthRefreshListenable extends ChangeNotifier {
+  _AuthRefreshListenable(Stream<AuthStatus> statuses) {
+    _subscription = statuses.listen((AuthStatus _) => notifyListeners());
+  }
 
-  /// Evaluates auth redirect rules based on session status.
-  static String? redirect(BuildContext context, {required bool isAuthenticated, required bool isOnboardingComplete}) {
-    if (!isAuthenticated) {
-      return isOnboardingComplete ? AppRoutes.login : AppRoutes.splash;
-    }
-    return null;
+  late final StreamSubscription<AuthStatus> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }
