@@ -1,50 +1,84 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:fyp_app/core/theme/app_theme.dart';
+import 'package:fyp_app/shared/widgets/focus_ring.dart';
+import 'package:fyp_app/shared/widgets/glass_surface.dart';
 
-/// Glassmorphism accent button adhering to Lafzio UI principles.
+enum GlassButtonStyle { glass, accent, danger }
+
+/// Round icon button. Default is the 44x44 glass button; `accent` is the filled
+/// "send a sign" style and `danger` is the red "End call" style.
 class GlassButton extends StatelessWidget {
-  final VoidCallback? onPressed;
-  final Widget child;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
-  final bool isPrimary;
-
   const GlassButton({
     super.key,
+    required this.icon,
+    required this.semanticLabel,
     required this.onPressed,
-    required this.child,
-    this.borderRadius = 14.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-    this.isPrimary = true,
-  });
+    this.size = 44,
+    this.iconSize = 22,
+    this.style = GlassButtonStyle.glass,
+  }) : assert(size >= 44, 'Touch targets must be at least 44x44');
+
+  final Widget icon;
+
+  /// Required: icon-only buttons need a screen-reader label (Design.md section 11).
+  final String semanticLabel;
+  final VoidCallback? onPressed;
+  final double size;
+  final double iconSize;
+  final GlassButtonStyle style;
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
+    final AppColors c = context.colors;
+    final BorderRadius radius = BorderRadius.circular(size / 2);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Material(
-          color: isPrimary ? colors.accent : colors.accentSoft,
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: InkWell(
-            onTap: onPressed,
-            borderRadius: BorderRadius.circular(borderRadius),
-            child: Padding(
-              padding: padding,
-              child: Center(
-                child: DefaultTextStyle(
-                  style: TextStyle(
-                    color: isPrimary ? colors.onAccent : colors.accent,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+    final Color foreground = switch (style) {
+      GlassButtonStyle.glass => c.text,
+      GlassButtonStyle.accent => c.onAccent,
+      GlassButtonStyle.danger => c.onDanger,
+    };
+
+    final Widget background = switch (style) {
+      GlassButtonStyle.glass => GlassSurface(borderRadius: radius, child: const SizedBox.expand()),
+      GlassButtonStyle.accent => DecoratedBox(
+          decoration: BoxDecoration(color: c.accent, borderRadius: radius),
+        ),
+      GlassButtonStyle.danger => DecoratedBox(
+          decoration: BoxDecoration(color: c.danger, borderRadius: radius),
+        ),
+    };
+
+    return Semantics(
+      button: true,
+      enabled: onPressed != null,
+      label: semanticLabel,
+      excludeSemantics: true,
+      child: Opacity(
+        opacity: onPressed == null ? 0.4 : 1,
+        child: FocusRing(
+          borderRadius: radius,
+          child: SizedBox.square(
+            dimension: size,
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(child: background),
+                Positioned.fill(
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      focusColor: Colors.transparent,
+                      onTap: onPressed,
+                      child: Center(
+                        child: IconTheme(
+                          data: IconThemeData(color: foreground, size: iconSize),
+                          child: icon,
+                        ),
+                      ),
+                    ),
                   ),
-                  child: child,
                 ),
-              ),
+              ],
             ),
           ),
         ),
