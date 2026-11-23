@@ -18,3 +18,11 @@ final class TranscriptionFailure extends Failure {
 final class ModuleFailure extends Failure {
   const ModuleFailure([super.message = 'Something stopped working. The rest of the app is fine.']);
 }
+
+final class AuthFailure extends Failure {
+  const AuthFailure([super.message = 'We could not sign you in. Please try again.']);
+}
+
+final class PermissionFailure extends Failure {
+  const PermissionFailure([super.message = 'Access is off. You can turn it on in Settings.']);
+}

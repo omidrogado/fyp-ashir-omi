@@ -280,13 +280,27 @@ abstract final class AppTheme {
       onSurface: c.text,
     );
 
+    // NOTE: GoogleFonts.interTextTheme() is not used on purpose. With newer Flutter
+    // (material_ui split) its TextTheme type does not match ThemeData.textTheme.
+    // GoogleFonts.inter() returns a plain TextStyle, which is safe everywhere.
+    final TextTheme textTheme = base.textTheme
+        .apply(bodyColor: c.text, displayColor: c.text)
+        .copyWith(
+          bodyLarge: GoogleFonts.inter(fontSize: 16, color: c.text),
+          bodyMedium: GoogleFonts.inter(fontSize: 14, color: c.text),
+          labelLarge: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: c.text,
+          ),
+        );
+
     return base.copyWith(
       colorScheme: scheme,
       scaffoldBackgroundColor: c.bg,
       canvasColor: c.bg,
       dividerColor: c.sep,
-      textTheme: GoogleFonts.interTextTheme(base.textTheme)
-          .apply(bodyColor: c.text, displayColor: c.text),
+      textTheme: textTheme,
       splashFactory: NoSplash.splashFactory,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       pageTransitionsTheme: const PageTransitionsTheme(

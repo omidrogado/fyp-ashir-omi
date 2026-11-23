@@ -1,7 +1,7 @@
 import 'package:fyp_app/features/recognition/domain/landmark_frame.dart';
 
 /// CONTRACT 4a: low-bandwidth WebRTC Data Channel packet. Proposed; Track B must sign off.
-/// JSON: {"v":1,"sender":"<userId>","seq":42,"ts":1732270000000,"hands":[...same as LandmarkFrame hands...]}
+/// JSON: `{"v":1,"sender":"USER_ID","seq":42,"ts":1732270000000,"hands":[...same as LandmarkFrame hands...]}`
 /// Sent instead of video; the receiver drives the sender's avatar from it.
 class SkeletalPacket {
   SkeletalPacket({
