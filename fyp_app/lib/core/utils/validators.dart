@@ -1,5 +1,4 @@
-/// Input validators for user forms
-class Validators {
+﻿class Validators {
   static String? validatePhone(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Phone number cannot be empty';

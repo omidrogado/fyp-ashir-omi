@@ -1,28 +1,33 @@
-/// User-facing failures. `message` is short, warm and safe to show on screen.
-sealed class Failure implements Exception {
-  const Failure(this.message);
+﻿abstract class Failure {
   final String message;
+  final int? statusCode;
+
+  const Failure(this.message, [this.statusCode]);
 
   @override
-  String toString() => '$runtimeType: $message';
+  String toString() => message;
 }
 
-final class NetworkFailure extends Failure {
-  const NetworkFailure([super.message = 'No connection. We will try again soon.']);
+class ServerFailure extends Failure {
+  const ServerFailure([super.message = 'A server error occurred. Please try again.']);
 }
 
-final class TranscriptionFailure extends Failure {
-  const TranscriptionFailure([super.message = 'Could not read that voice message. Tap to retry.']);
+class AuthFailure extends Failure {
+  const AuthFailure([super.message = 'Authentication failed. Please verify credentials.']);
 }
 
-final class ModuleFailure extends Failure {
-  const ModuleFailure([super.message = 'Something stopped working. The rest of the app is fine.']);
+class NetworkFailure extends Failure {
+  const NetworkFailure([super.message = 'No internet connection.']);
 }
 
-final class AuthFailure extends Failure {
-  const AuthFailure([super.message = 'We could not sign you in. Please try again.']);
+class CacheFailure extends Failure {
+  const CacheFailure([super.message = 'Local database cache error.']);
 }
 
-final class PermissionFailure extends Failure {
-  const PermissionFailure([super.message = 'Access is off. You can turn it on in Settings.']);
+class RecognitionFailure extends Failure {
+  const RecognitionFailure([super.message = 'Sign recognition failed. Check lighting.']);
+}
+
+class SoundDetectionFailure extends Failure {
+  const SoundDetectionFailure([super.message = 'Sound detection failed to initialize.']);
 }

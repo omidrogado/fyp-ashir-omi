@@ -9,176 +9,228 @@ An assistive chat and video-calling application bridging the communication gap b
 
 ```
 fyp-ashir-omi/
-├── assets/                            # Shared design assets (icons, hand-sign images, avatars, .glb)
-│   ├── signs/
-│   ├── avatars/
-│   └── icons/
-├── fyp_app/                           # Flutter Android application
-│   ├── lib/
-│   │   ├── main.dart
-│   │   ├── app.dart                   # MaterialApp.router, theme mode
-│   │   ├── core/
-│   │   │   ├── theme/
-│   │   │   │   └── app_theme.dart     # Design tokens (light & dark)
-│   │   │   ├── router/
-│   │   │   │   └── app_router.dart    # go_router + auth redirects
-│   │   │   ├── config/
-│   │   │   │   └── app_config.dart    # Supabase & FastAPI env settings
-│   │   │   ├── errors/
-│   │   │   │   └── failures.dart      # Failure types & user-facing error messages
-│   │   │   ├── database/
-│   │   │   │   └── app_database.dart  # sqflite setup & migrations
-│   │   │   └── utils/
-│   │   │       └── validators.dart
-│   │   ├── shared/
-│   │   │   └── widgets/
-│   │   │       ├── chat_bubble.dart
-│   │   │       ├── glass_button.dart
-│   │   │       ├── glass_nav_bar.dart
-│   │   │       ├── grouped_card.dart
-│   │   │       └── otp_box.dart
-│   │   ├── features/
-│   │   │   ├── onboarding/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── splash_screen.dart
-│   │   │   │   │   │   ├── intro_screen.dart
-│   │   │   │   │   │   ├── phone_input_screen.dart
-│   │   │   │   │   │   ├── otp_verify_screen.dart
-│   │   │   │   │   │   ├── theme_selection_screen.dart
-│   │   │   │   │   │   ├── user_type_screen.dart
-│   │   │   │   │   │   ├── profile_setup_screen.dart
-│   │   │   │   │   │   ├── avatar_selection_screen.dart
-│   │   │   │   │   │   └── permissions_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── auth/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   └── screens/
-│   │   │   │   │       └── login_screen.dart
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── chat/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── chat_list_screen.dart
-│   │   │   │   │   │   ├── conversation_screen.dart
-│   │   │   │   │   │   ├── new_chat_screen.dart
-│   │   │   │   │   │   └── contact_info_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── recognition/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   └── sign_camera_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   │       └── ambiguity_popup.dart
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── custom_signs/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── custom_dictionary_screen.dart
-│   │   │   │   │   │   ├── record_sign_screen.dart
-│   │   │   │   │   │   ├── verify_sign_screen.dart
-│   │   │   │   │   │   └── sign_detail_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── translation/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── text_to_sign_screen.dart
-│   │   │   │   │   │   └── speech_to_sign_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   │       └── sign_keyboard_widget.dart
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── avatars/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   └── avatar_preview_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── calls/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── call_history_screen.dart
-│   │   │   │   │   │   ├── incoming_call_screen.dart
-│   │   │   │   │   │   ├── outgoing_call_screen.dart
-│   │   │   │   │   │   └── active_call_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── alerts/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   └── danger_alerts_log_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   │       └── danger_alert_banner.dart
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── face_to_face/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   └── face_to_face_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   ├── help/
-│   │   │   │   ├── presentation/
-│   │   │   │   │   ├── screens/
-│   │   │   │   │   │   ├── help_center_screen.dart
-│   │   │   │   │   │   └── submit_complaint_screen.dart
-│   │   │   │   │   └── widgets/
-│   │   │   │   ├── application/
-│   │   │   │   ├── domain/
-│   │   │   │   └── data/
-│   │   │   └── settings/
-│   │   │       ├── presentation/
-│   │   │       │   ├── screens/
-│   │   │       │   │   ├── settings_screen.dart
-│   │   │       │   │   ├── edit_profile_screen.dart
-│   │   │       │   │   ├── change_avatar_screen.dart
-│   │   │       │   │   ├── language_speech_settings_screen.dart
-│   │   │       │   │   └── danger_detection_settings_screen.dart
-│   │   │       │   └── widgets/
-│   │   │       ├── application/
-│   │   │       ├── domain/
-│   │   │       └── data/
-│   │   └── platform/                  # Dart side of native bridges
-│   │       ├── mediapipe_channel.dart
-│   │       └── yamnet_channel.dart
-│   ├── android/                       # Native Kotlin code for MediaPipe & YAMNet bridges
-│   └── test/                          # Unit & widget tests
-├── ml-engine/                         # Python workspace (DTW tuning, landmark testing, Whisper/token tests)
-├── Architecture.md
-├── Design.md
-├── Memory.md
-├── PRD.md
-├── Phases.md
-├── README.md
-└── Rules.md
+├── assets/
+│   ├── avatars/                  # .glb 3D avatar models
+│   ├── sign_animations/          # pre-baked sign animation .glb
+│   ├── sign_images/              # A-Z aur digits ke static hand-sign images
+│   ├── models/                   # yamnet.tflite, hand_landmarker.task
+│   ├── sounds/
+│   ├── icons/
+│   └── fonts/
+│
+├── fyp_app/
+│   ├── pubspec.yaml
+│   ├── android/
+│   ├── test/
+│   └── lib/
+│       ├── main.dart ⭐
+│       ├── app.dart ⭐                     # MaterialApp, theme, router
+│       │
+│       ├── core/
+│       │   ├── constants/
+│       │   │   ├── app_colors.dart ⭐
+│       │   │   ├── app_strings.dart
+│       │   │   ├── app_routes.dart ⭐
+│       │   │   └── haptic_patterns.dart ⭐
+│       │   ├── theme/
+│       │   │   ├── app_theme.dart ⭐
+│       │   │   └── app_text_styles.dart ⭐
+│       │   ├── router/
+│       │   │   └── app_router.dart ⭐
+│       │   ├── utils/
+│       │   │   ├── permission_helper.dart ⭐
+│       │   │   ├── validators.dart
+│       │   │   └── date_formatter.dart
+│       │   ├── errors/
+│       │   │   └── failures.dart
+│       │   └── widgets/                    # shared widgets
+│       │       ├── primary_button.dart ⭐
+│       │       ├── app_text_field.dart ⭐
+│       │       ├── app_bottom_nav.dart ⭐
+│       │       ├── avatar_circle.dart
+│       │       ├── loading_overlay.dart
+│       │       └── empty_state.dart
+│       │
+│       ├── native_bridge/                  # sirf platform/plugin wrappers
+│       │   ├── audio_input_service.dart ⭐  # mic stream
+│       │   ├── haptic_service.dart ⭐       # vibration patterns
+│       │   ├── notification_service.dart ⭐
+│       │   ├── camera_service.dart
+│       │   └── speech_recognizer_service.dart
+│       │
+│       ├── data/
+│       │   ├── local/
+│       │   │   ├── database_helper.dart    # sqflite setup
+│       │   │   ├── chat_dao.dart
+│       │   │   ├── sign_dao.dart
+│       │   │   └── alert_history_dao.dart ⭐
+│       │   ├── remote/
+│       │   │   ├── supabase_client.dart
+│       │   │   └── fastapi_client.dart
+│       │   └── models/
+│       │       ├── app_user.dart
+│       │       ├── message.dart
+│       │       ├── chat_thread.dart
+│       │       ├── call_record.dart
+│       │       ├── custom_sign.dart
+│       │       ├── help_request.dart
+│       │       └── danger_alert.dart ⭐
+│       │
+│       └── features/
+│           ├── onboarding/ ⭐
+│           │   ├── screens/
+│           │   │   ├── splash_screen.dart
+│           │   │   ├── welcome_screen.dart
+│           │   │   ├── intro_slides_screen.dart
+│           │   │   ├── role_selection_screen.dart
+│           │   │   └── permissions_screen.dart
+│           │   ├── widgets/
+│           │   └── providers/onboarding_provider.dart
+│           │
+│           ├── auth/
+│           │   ├── screens/
+│           │   │   ├── register_screen.dart
+│           │   │   ├── login_screen.dart
+│           │   │   └── otp_screen.dart
+│           │   ├── repository/auth_repository.dart
+│           │   └── providers/auth_provider.dart
+│           │
+│           ├── profile/                    # "Me" tab
+│           │   ├── screens/
+│           │   │   ├── me_screen.dart ⭐
+│           │   │   ├── edit_profile_screen.dart
+│           │   │   ├── notifications_settings_screen.dart
+│           │   │   ├── privacy_security_screen.dart
+│           │   │   └── text_display_screen.dart
+│           │   └── providers/profile_provider.dart
+│           │
+│           ├── chat/
+│           │   ├── screens/
+│           │   │   ├── chats_list_screen.dart ⭐ (UI shell)
+│           │   │   ├── conversation_screen.dart ⭐ (UI shell)
+│           │   │   ├── new_chat_screen.dart
+│           │   │   └── user_discovery_screen.dart
+│           │   ├── widgets/
+│           │   │   ├── message_bubble.dart
+│           │   │   ├── voice_message_bubble.dart
+│           │   │   ├── sign_row_view.dart
+│           │   │   ├── chat_input_bar.dart
+│           │   │   └── lafzio_keyboard.dart
+│           │   ├── repository/chat_repository.dart
+│           │   └── providers/chat_provider.dart
+│           │
+│           ├── voice_message/
+│           │   ├── screens/transcript_view_screen.dart
+│           │   ├── services/voice_recorder_service.dart
+│           │   └── providers/voice_message_provider.dart
+│           │
+│           ├── sign_recognition/
+│           │   ├── screens/sign_to_text_screen.dart
+│           │   ├── widgets/
+│           │   │   ├── camera_preview_panel.dart
+│           │   │   ├── hand_overlay_painter.dart
+│           │   │   └── ambiguous_sign_popup.dart
+│           │   ├── services/
+│           │   │   ├── landmark_extractor.dart   # isolate mein
+│           │   │   ├── dtw_matcher.dart
+│           │   │   └── sign_isolate.dart
+│           │   └── providers/recognition_provider.dart
+│           │
+│           ├── custom_signs/
+│           │   ├── screens/
+│           │   │   ├── my_signs_screen.dart
+│           │   │   ├── teach_sign_screen.dart
+│           │   │   └── sign_conflict_screen.dart
+│           │   ├── widgets/take_counter.dart
+│           │   └── providers/custom_sign_provider.dart
+│           │
+│           ├── translation/
+│           │   ├── screens/
+│           │   │   ├── translate_screen.dart
+│           │   │   └── text_to_sign_sheet.dart
+│           │   ├── widgets/
+│           │   │   ├── avatar_view.dart
+│           │   │   ├── fingerspelling_row.dart
+│           │   │   └── hold_to_speak_button.dart
+│           │   ├── services/
+│           │   │   ├── sign_mapper.dart
+│           │   │   └── avatar_controller.dart
+│           │   └── providers/translation_provider.dart
+│           │
+│           ├── calling/
+│           │   ├── screens/
+│           │   │   ├── calls_history_screen.dart
+│           │   │   ├── incoming_call_screen.dart
+│           │   │   ├── outgoing_call_screen.dart
+│           │   │   └── video_call_screen.dart
+│           │   ├── widgets/
+│           │   │   ├── call_controls.dart
+│           │   │   ├── live_caption_bar.dart
+│           │   │   └── dual_avatar_view.dart
+│           │   ├── services/
+│           │   │   ├── webrtc_service.dart
+│           │   │   ├── signaling_service.dart
+│           │   │   └── skeleton_data_channel.dart  # low-bandwidth JSON
+│           │   └── providers/call_provider.dart
+│           │
+│           ├── face_to_face/
+│           │   ├── screens/face_to_face_screen.dart
+│           │   └── providers/face_to_face_provider.dart
+│           │
+│           ├── sound_alerts/ ⭐                # is hafte ka main feature
+│           │   ├── screens/
+│           │   │   ├── sound_alerts_screen.dart       # toggle + sounds list + listening indicator
+│           │   │   ├── danger_alert_screen.dart       # full-screen red alert
+│           │   │   └── alert_history_screen.dart
+│           │   ├── widgets/
+│           │   │   ├── listening_indicator.dart
+│           │   │   ├── sound_type_tile.dart
+│           │   │   └── alert_history_tile.dart
+│           │   ├── services/
+│           │   │   ├── yamnet_classifier.dart         # TFLite inference
+│           │   │   ├── danger_detector.dart           # threshold + consecutive frames
+│           │   │   └── detection_isolate.dart
+│           │   └── providers/
+│           │       ├── sound_alerts_provider.dart
+│           │       └── alert_history_provider.dart
+│           │
+│           └── help/
+│               ├── screens/
+│               │   ├── help_screen.dart
+│               │   ├── submit_request_screen.dart
+│               │   └── tutorials_screen.dart
+│               └── providers/help_provider.dart
+│
+├── ml-engine/
+│   ├── sign_dictionary/              # base signs ka data
+│   ├── scripts/                      # model convert / export scripts
+│   └── README.md
+│
+├── backend/                          # FastAPI server
+│   ├── main.py
+│   ├── routers/
+│   │   ├── transcribe.py             # Whisper
+│   │   └── sign_mapping.py           # text -> sign tokens
+│   ├── services/
+│   ├── requirements.txt
+│   └── README.md
+│
+└── docs/
+    ├── Architecture.md
+    ├── Design.md
+    ├── Memory.md
+    ├── Phases.md
+    ├── PRD.md
+    ├── Rules.md
+    └── README.md
 ```
 
 ---
 
 ## Architectural & Design Documentation
 
-- **[Architecture.md](Architecture.md)**: System architecture, hybrid device-cloud boundary, 9 modules, state management, SQLite schema, WebRTC protocols.
-- **[Design.md](Design.md)**: Color tokens (`AppColors`), typography, component styling, light and dark themes.
-- **[Rules.md](Rules.md)**: AI guardrails, strict typing, threading constraints, offline-first principles.
-- **[PRD.md](PRD.md)** & **[Phases.md](Phases.md)**: Requirements, timeline, milestone deliverables.
+Documentation lives inside the [`docs/`](docs/) directory:
+- **[docs/Architecture.md](docs/Architecture.md)**: System architecture, hybrid device-cloud boundary, Riverpod state, SQLite schema, WebRTC protocols.
+- **[docs/Design.md](docs/Design.md)**: UI tokens, typography, component styling, light and dark themes.
+- **[docs/Rules.md](docs/Rules.md)**: AI guardrails, strict typing, threading constraints, offline-first principles.
+- **[docs/PRD.md](docs/PRD.md)** & **[docs/Phases.md](docs/Phases.md)**: Product requirements, milestones, weekly development phases.
