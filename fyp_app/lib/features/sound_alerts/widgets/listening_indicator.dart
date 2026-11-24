@@ -9,7 +9,7 @@ class ListeningIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isListening ? Colors.green.withOpacity(0.12) : Colors.grey.withOpacity(0.12),
+        color: isListening ? Colors.green.withValues(alpha: 0.12) : Colors.grey.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(

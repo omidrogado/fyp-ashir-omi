@@ -14,6 +14,8 @@ class CameraService {
   Future<void> releaseCamera() async {
     try {
       await _channel.invokeMethod('releaseCamera');
-    } on PlatformException {}
+    } on PlatformException {
+      // Ignore platform error on cleanup
+    }
   }
 }

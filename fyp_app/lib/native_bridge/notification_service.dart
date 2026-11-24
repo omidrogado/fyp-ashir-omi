@@ -13,7 +13,9 @@ class NotificationService {
         'body': body,
         'channel': 'danger_alerts',
       });
-    } on PlatformException {}
+    } on PlatformException {
+      // Ignore notification platform error
+    }
   }
 
   static Future<void> showCallNotification({
@@ -23,6 +25,8 @@ class NotificationService {
       await _channel.invokeMethod('showIncomingCallNotification', {
         'callerName': callerName,
       });
-    } on PlatformException {}
+    } on PlatformException {
+      // Ignore notification platform error
+    }
   }
 }

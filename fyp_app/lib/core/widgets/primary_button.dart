@@ -22,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
     final onAccent = isDark ? AppColors.darkOnAccent : AppColors.lightOnAccent;
 
     return Material(
-      color: isSecondary ? accent.withOpacity(0.14) : accent,
+      color: isSecondary ? accent.withValues(alpha: 0.14) : accent,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         onTap: onPressed,

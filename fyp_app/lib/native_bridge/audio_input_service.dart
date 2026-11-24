@@ -16,7 +16,9 @@ class AudioInputService {
   Future<void> stopMicrophoneStream() async {
     try {
       await _channel.invokeMethod('stopMicrophoneStream');
-    } on PlatformException {}
+    } on PlatformException {
+      // Ignore platform error on cleanup
+    }
   }
 
   Stream<dynamic> get audioStream {

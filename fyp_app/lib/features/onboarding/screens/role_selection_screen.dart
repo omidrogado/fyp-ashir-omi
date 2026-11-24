@@ -26,20 +26,22 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
               const SizedBox(height: 8),
               const Text('Select how you will communicate on Lafzio.', style: TextStyle(color: Colors.grey)),
               const SizedBox(height: 32),
-              ListTile(
-                title: const Text('Deaf / Hard of Hearing'),
-                leading: Radio<String>(
-                  value: 'deaf',
-                  groupValue: selectedRole,
-                  onChanged: (v) => setState(() => selectedRole = v!),
-                ),
-              ),
-              ListTile(
-                title: const Text('Hearing Individual'),
-                leading: Radio<String>(
-                  value: 'hearing',
-                  groupValue: selectedRole,
-                  onChanged: (v) => setState(() => selectedRole = v!),
+              RadioGroup<String>(
+                groupValue: selectedRole,
+                onChanged: (v) {
+                  if (v != null) setState(() => selectedRole = v);
+                },
+                child: Column(
+                  children: const [
+                    ListTile(
+                      title: Text('Deaf / Hard of Hearing'),
+                      leading: Radio<String>(value: 'deaf'),
+                    ),
+                    ListTile(
+                      title: Text('Hearing Individual'),
+                      leading: Radio<String>(value: 'hearing'),
+                    ),
+                  ],
                 ),
               ),
               const Spacer(),

@@ -18,7 +18,7 @@ class AvatarCircle extends StatelessWidget {
 
     return CircleAvatar(
       radius: radius,
-      backgroundColor: const Color(0xFF5AA9FF).withOpacity(0.2),
+      backgroundColor: const Color(0xFF5AA9FF).withValues(alpha: 0.2),
       backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
       child: imageUrl == null
           ? Text(

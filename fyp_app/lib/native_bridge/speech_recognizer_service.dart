@@ -15,7 +15,9 @@ class SpeechRecognizerService {
   Future<void> stopListening() async {
     try {
       await _channel.invokeMethod('stopListening');
-    } on PlatformException {}
+    } on PlatformException {
+      // Ignore platform error on stop
+    }
   }
 
   Stream<dynamic> get resultsStream {

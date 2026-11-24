@@ -1,16 +1,14 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_routes.dart';
-import '../providers/sound_alerts_provider.dart';
 import '../widgets/listening_indicator.dart';
 import '../widgets/sound_type_tile.dart';
 
-class SoundAlertsScreen extends ConsumerWidget {
+class SoundAlertsScreen extends StatelessWidget {
   const SoundAlertsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isListening = ref.watch(isListeningProvider);
+  Widget build(BuildContext context) {
+    const isListening = true;
 
     return Scaffold(
       appBar: AppBar(
@@ -24,15 +22,15 @@ class SoundAlertsScreen extends ConsumerWidget {
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: [
+        children: const [
           ListeningIndicator(isListening: isListening),
-          const SizedBox(height: 24),
-          const Text('Active Danger Sound Types', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          const SoundTypeTile(title: 'Siren (Fire / Police)', isEnabled: true),
-          const SoundTypeTile(title: 'Smoke / Carbon Monoxide Alarm', isEnabled: true),
-          const SoundTypeTile(title: 'Car Horn / Honk', isEnabled: true),
-          const SoundTypeTile(title: 'Glass Break', isEnabled: false),
+          SizedBox(height: 24),
+          Text('Active Danger Sound Types', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          SizedBox(height: 12),
+          SoundTypeTile(title: 'Siren (Fire / Police)', isEnabled: true),
+          SoundTypeTile(title: 'Smoke / Carbon Monoxide Alarm', isEnabled: true),
+          SoundTypeTile(title: 'Car Horn / Honk', isEnabled: true),
+          SoundTypeTile(title: 'Glass Break', isEnabled: false),
         ],
       ),
     );

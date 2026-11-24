@@ -15,7 +15,7 @@ class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = (isDark ? AppColors.darkBg : AppColors.lightBg).withOpacity(0.85);
+    final bg = (isDark ? AppColors.darkBg : AppColors.lightBg).withValues(alpha: 0.85);
     final accent = isDark ? AppColors.darkAccent : AppColors.lightAccent;
     final unselected = isDark ? AppColors.darkSec : AppColors.lightSec;
 

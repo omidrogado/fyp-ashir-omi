@@ -6,7 +6,7 @@ class AvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blueGrey.withOpacity(0.1),
+      color: Colors.blueGrey.withValues(alpha: 0.1),
       child: const Center(child: Text('.glb 3D Avatar Viewport')),
     );
   }

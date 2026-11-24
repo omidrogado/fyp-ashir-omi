@@ -1,3 +1,1 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final faceToFaceActiveProvider = StateProvider<bool>((ref) => false);
+﻿// Face-to-face provider placeholder
