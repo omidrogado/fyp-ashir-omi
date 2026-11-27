@@ -1,1 +1,0 @@
-﻿// Sign recognition provider placeholder

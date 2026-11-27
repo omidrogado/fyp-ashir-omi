@@ -1,1 +1,0 @@
-﻿// Sound alerts provider placeholder
